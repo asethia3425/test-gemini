@@ -16,14 +16,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Admin credentials - CHANGE THESE FOR PRODUCTION!
-// Replace with your actual admin email address
 const ADMIN_EMAIL = "admin@grainbroker.com";
-
-// You can also add multiple admin emails
-const ADMIN_EMAILS = [
-  "admin@grainbroker.com",
-  "youremail@example.com" // Add your email here to make yourself admin
-];
+const ADMIN_PASSWORD = "admin123";
 
 let allUsers = [];
 let allBookings = [];
@@ -38,8 +32,8 @@ window.handleAdminLogin = async () => {
     
     if(!email || !pass) return alert("Please enter credentials");
     
-    // Check if email is in admin list
-    if(!ADMIN_EMAILS.includes(email)) {
+    // Check if admin credentials
+    if(email !== ADMIN_EMAIL) {
         return alert("Access Denied: Not an admin account");
     }
     
@@ -53,7 +47,7 @@ window.handleAdminLogin = async () => {
 window.adminLogout = () => signOut(auth);
 
 onAuthStateChanged(auth, async (user) => {
-    if (user && ADMIN_EMAILS.includes(user.email)) {
+    if (user && user.email === ADMIN_EMAIL) {
         document.getElementById('admin-auth').style.display = 'none';
         document.getElementById('admin-ui').style.display = 'block';
         document.getElementById('admin-name').innerText = 'Admin';
